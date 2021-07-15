@@ -1,8 +1,18 @@
 # SCSS in Vue-cli
 
-vue 2버전이므로
+css 전처리기(css Preprocessor)
+
+CSS는 불편하므로 CSS와 유사한 문법으로 작성하여 웹에서 동작 가능한 CSS로 컴파일해서 사용
+
+
+
+~~vue 2버전이므로~~ => webpack4 버전이므로
 
 `npm i node-sass sass-loader@10 --save-dev`
+
+`npm i -D sass-loader@^10 sass`
+
+??
 
 
 
@@ -32,3 +42,8 @@ module.exports = {
 
 
 
+
+
+
+
+https://heropy.blog/2018/01/31/sass/

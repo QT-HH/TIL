@@ -34,8 +34,32 @@ module.exports = {
 
 
 
+`publicPath`
+
+=> 개발환경과 달리 deploy한 환경에서는 publicPath가 달라질 수 있기에 Production과 Development환경에 따른 publickPath를 수시로 변경해줘야한다.
+
+
+
+
+
+그러므로 환경에따라 publicPath를 변경해줘야한다
+
+```javascript
+/* process.env.NODE_ENV를 활용한다. */
+
+module.exports = {
+    publicPath: process.env.NODE_ENV === 'production'
+    ? `/production-sub-path/`
+    : `/`
+}
+```
+
+
+
 
 
 
 
 - https://kabkee.github.io/vue-cli/vue-cli-publicPath/
+- http://daplus.net/javascript-webpack%EC%9D%98-publicpath%EB%8A%94-%EB%AC%B4%EC%97%87%EC%9D%84%ED%95%A9%EB%8B%88%EA%B9%8C/
+
