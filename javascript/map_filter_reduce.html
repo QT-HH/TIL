@@ -1,0 +1,69 @@
+<script>
+  const log = console.log
+
+  const map = (f, iter) => {
+    res = []
+    for (const el of iter) {
+      res.push(f(el))
+    }
+    return res
+  }
+
+  log([1,2,3].map(a => a+1))
+  log(map(a => a*2, [1,2,3]))
+
+</script>
+
+<script>
+  const filter = (f, iter) => {
+    res = []
+    for (const el of iter) {
+      if (f(el)) res.push(el)
+    }
+    return res
+  }
+
+  log(filter(a => a%2, [1,2,3,4,5,6,7]))
+</script>
+
+<script>
+  // reduce는 축약하는고임
+  const nums = [1,2,3,4,5]
+  // let total = 0
+  // for (const n of nums) {
+  //   total = total + n;
+  // }
+  // log(total)
+
+  const reduce = (f, acc, iter) => {
+    if (!iter) {
+      iter = acc[Symbol.iterator]()
+      acc = iter.next().value
+    }
+
+    for (const a of iter) {
+      acc = f(acc, a)
+    }
+    return acc
+  }
+
+  const add = (a, b) => a + b
+  log(add(add(add(add(0, 1), 2), 3), 4))
+  log(reduce(add, 0, [1,2,3,4,5]))
+
+  log(reduce(add, [1,2,3,4,5]))
+
+  console.clear()
+</script>
+
+<script>
+  const go = (...args) => reduce((a, f) => f(a), args)
+
+  go(
+    0,
+    a => a + 1,
+    a => a + 10,
+    a => a + 100,
+    log)
+  // 111
+</script>
