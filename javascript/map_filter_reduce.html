@@ -41,7 +41,6 @@
       acc = iter.next().value
     }
     for (const a of iter) {
-      log(acc, a, f)
       acc = f(acc, a)
     }
     return acc
