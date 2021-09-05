@@ -1,0 +1,52 @@
+<html>
+  <div class="todo">
+    <h3>할 일 목록</h3>
+    <ul class="list"></ul>
+    <input type="text" class="desc">
+    <button onClick="onAdd()">추가</button>
+    <button onClick="onSaveToServer()">서버에 저장</button>
+  </div>
+  <script>
+    let currentId = 1
+    const todoList = []
+    const onAdd = () => {
+      const descEl = document.querySelector('.todo .desc')
+      const todo = { id: currentId++, desc: descEl.value }
+      todoList.push(todo)
+      const listEl = document.querySelector('.todo .list')
+      const todoEl = makeTodoElement(todo)
+      listEl.appendChild(todoEl)
+
+      descEl.value = ''
+    }
+
+    const makeTodoElement = todo => {
+      const todoEl = document.createElement('li')
+      const spanEl = document.createElement('span')
+      const buttonEl = document.createElement('button')
+      spanEl.innerHTML = todo.desc
+      buttonEl.innerHTML = '삭제'
+      buttonEl.dataset.id = todo.id
+      buttonEl.onclick = onDelete
+      todoEl.appendChild(spanEl)
+      todoEl.appendChild(buttonEl)
+      return todoEl
+    }
+
+    const onDelete = (e) => {
+      const id = Number(e.target.dataset.id)
+      const index = todoList.findIndex(item => item.id === id)
+      if (index >= 0) {
+        todoList.splice(index, 1)
+        const listEl = document.querySelector('.todo .list')
+        const todoEl = e.target.parentNode
+        listEl.removeChild(todoEl)
+      }
+    }
+
+    const onSaveToServer = () => {
+      // todoList를 서버로 전송한다.
+    }
+
+  </script>
+</html>
