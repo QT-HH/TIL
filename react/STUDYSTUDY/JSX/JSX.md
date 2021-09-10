@@ -89,7 +89,110 @@ function getGreeting(user) {
 
 => 요소에 class를 줄 때는 class 대신 className을 사용 (class는 JS예약어임)
 
-=> 그리고 HTML attribute이름은 camelCase로 입력한다. ( tabindex => tabIndex )
+=> 그리고 HTML attribute이름은 camelCase로 입력한다. ( onclick => onClick )
+
+
+
+JSX에 삽입 된 값을 렌더링하기전에 이스케이프 하고, 모든 항목은 렌더링 되기 전에 문자열로 바뀐다.
+
+
+
+
+
+Babel은 JSX를 React.createElement()로 컴파일한다.
+
+```react
+const element = (
+  <h1 className="greeting">
+    Hello, world!
+  </h1>
+);
+```
+
+```javascript
+const element = React.createElement(
+  'h1',
+  {className: 'greeting'},
+  'Hello, world!'
+);
+```
+
+위의 두 예시는 동일한 코드이다.
+
+다음과 같은 객체를 생성한다.
+
+```javascript
+// 주의: 다음 구조는 단순화되었습니다
+const element = {
+  type: 'h1',
+  props: {
+    className: 'greeting',
+    children: 'Hello, world!'
+  }
+};
+```
+
+
+
+
+
+JSX의 내부 주석은
+
+`{/* 주석주석주석 */}` 이런 형태로 작성한다.
+
+
+
+HTML과 똑같이 여는 태그가 있으면 닫는 태그가 있어야하며, `input`과 `br`태그도 꼭 닫아줘야한다.
+
+`<div />` 와 같이 셀프클로징도 가능하다.
+
+
+
+함수의 return 시 두 개 이상의 태그는 반드시 하나의 태그로 감싸져야한다.
+
+( Vue component에서 template 안에는 무조건 하나의 태그로 감싸는것처럼 )
+
+결과적으로 나누어져있는 상태로 렌더링하고싶다면 React.Fragment로 감싸주어야한다.
+
+```react
+function App () {
+  return (
+    <React.Fragment>
+    	<Hello />
+    	<div>안녕하세용</div>
+    </React.Fragment>
+  )
+}
+
+// 혹은 빈 태그로 감싸주면 Fragment로 감싸는것과 같다.
+function App () {
+  return (
+    <>
+    	<Hello />
+    	<div>안녕하세용</div>
+    </>
+  )
+}
+```
+
+
+
+Fragment에 key를 줘서 v-for의 효과를 볼 수도 있다.
+
+```react
+function Glossary (props) {
+  return (
+  	<dl>
+    	{ props.items.map(item => {
+        <React.Fragment key={item.id}>
+        	<dt>{ item.term }</dt>
+          <dd>{ item.descriptioin }</dd>
+        </React.Fragment>
+      }) }
+    </dl>
+  )
+}
+```
 
 
 
