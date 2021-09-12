@@ -1,8 +1,6 @@
 # JSX
 
-
-
-> JS를 확장한 문법
+> JavaScript eXtension  JS를 확장한 문법
 >
 > UI가 어떻게 생겨야 하는지 설명하기 위해 React와 함께 사용한다.
 >
@@ -36,7 +34,7 @@ const user = {
 
 const element = (
   <h1>
-    Hello, {formatName(user)}!
+    Hello, { formatName(user) }!
   </h1>
 );
 
@@ -77,19 +75,29 @@ function getGreeting(user) {
 
 속성에 따옴표`""`를 이용하여 문자열 리터럴을 정의할 수 있다.
 
-` const element = <div tabIndex="0"></div>`
+```react
+const element = <div className="my-class"></div>
+```
+
+
+
+
 
 중괄호를 이용하여 attribute에 JS표현식을 삽입할 수도 있다.
 
-` const element = <img src={ user.avatarUrl }></img>`
+```react
+const element = <img src={ user.avatarUrl }></img>
+```
 
 =>  attribute에 JS표현식을 삽입할 때 따옴표 또는 중괄호 중 하나만 사용해야한다.
 
+
+
 따옴표는 문자열값, 중괄호는 표현식 값에 사용된다.
 
-=> 요소에 class를 줄 때는 class 대신 className을 사용 (class는 JS예약어임)
+=> 요소에 class를 줄 때는 `class` 대신 `className`을 사용 (class는 JS예약어임)
 
-=> 그리고 HTML attribute이름은 camelCase로 입력한다. ( onclick => onClick )
+=> 그리고 HTML attribute이름은 camelCase로 입력한다. ( `onclick` => `onClick` ) (style도 마찬가지 { `margin-top` x => `marginTop` })
 
 
 
@@ -98,6 +106,8 @@ JSX에 삽입 된 값을 렌더링하기전에 이스케이프 하고, 모든 �
 
 
 
+
+## Babel
 
 Babel은 JSX를 React.createElement()로 컴파일한다.
 
@@ -136,11 +146,7 @@ const element = {
 
 
 
-JSX의 내부 주석은
-
-`{/* 주석주석주석 */}` 이런 형태로 작성한다.
-
-
+## Tag, Fragment
 
 HTML과 똑같이 여는 태그가 있으면 닫는 태그가 있어야하며, `input`과 `br`태그도 꼭 닫아줘야한다.
 
@@ -152,7 +158,7 @@ HTML과 똑같이 여는 태그가 있으면 닫는 태그가 있어야하며, `
 
 ( Vue component에서 template 안에는 무조건 하나의 태그로 감싸는것처럼 )
 
-결과적으로 나누어져있는 상태로 렌더링하고싶다면 React.Fragment로 감싸주어야한다.
+결과적으로 나누어져있는 상태로 렌더링하고싶다면 `React.Fragment`로 감싸주어야한다.
 
 ```react
 function App () {
@@ -197,4 +203,50 @@ function Glossary (props) {
 
 
 
+
+## 조건부 연산자
+
+JSX 내부의  JS표현식에서는 if문을 사용할 수 없다.
+
+따라서 JSX문 밖에서 사전에 if문을 사용하여 값을 설정하거나 `{}` 안에 삼항 연산자를 사용하면 된다.
+
+```react
+import React from 'react'
+
+function App () {
+  const name = 'react'
+  return (
+  	<div>
+    	{ name === 'react' ? (<h1>This is React.</h1>) : (<h2>This is not React</h2>) }
+    </div>
+  )
+}
+```
+
+
+
+`v-if` 처럼 특정 조건에서 렌더링을 할지 안할지 정해야한다면  `&&` 연산자도 사용할 수 있다.
+
+```react
+function App () {
+  const name = 'react'
+  return (
+  	<div>
+    	{ name === 'react' && <h1>It's correct!</h1> }
+    </div>
+  )
+}
+```
+
+
+
+
+
+
+
+## 주석
+
+JSX의 내부 주석은
+
+`{/* 주석주석주석 */}` 이런 형태로 작성한다.
 
