@@ -6,7 +6,7 @@
 >
 > JS의 모든 기능이 포함되어있다.
 >
-> React에서 필수는 아니지만, UI 가독성과 생산성을 높이는데 큰 역할을 한다.
+> React에서 필수는 아니지만, UI 가독성과 생산성을 높이는데 큰 역할을 한다
 
 
 
@@ -52,56 +52,16 @@ name을 중괄호`{}`안에 넣어 변수를 써먹었다.
 
 
 
-컴파일 후 JSX 표현식이 정규 JS함수 호출이 되고 JS 객체로 인식된다.
-
-즉, JSX를 변수에 할당하거나, 인자로 받아들이거나, 함수로 반환할 수 있다.
+JSX를 변수에 할당하거나, 인자로 받아들이거나, 함수로 반환할 수 있다.
 
 ```react
 function getGreeting(user) {
   if (user) {
-    return <h1>Hello, {formatName(user)}!</h1>;
+    return <h1>Hello, { formatName(user) }!</h1>;
   }
   return <h1>Hello, Stranger.</h1>;
 }
 ```
-
-
-
-
-
-
-
-## JSX 속성 정의
-
-속성에 따옴표`""`를 이용하여 문자열 리터럴을 정의할 수 있다.
-
-```react
-const element = <div className="my-class"></div>
-```
-
-
-
-
-
-중괄호를 이용하여 attribute에 JS표현식을 삽입할 수도 있다.
-
-```react
-const element = <img src={ user.avatarUrl }></img>
-```
-
-=>  attribute에 JS표현식을 삽입할 때 따옴표 또는 중괄호 중 하나만 사용해야한다.
-
-
-
-따옴표는 문자열값, 중괄호는 표현식 값에 사용된다.
-
-=> 요소에 class를 줄 때는 `class` 대신 `className`을 사용 (class는 JS예약어임)
-
-=> 그리고 HTML attribute이름은 camelCase로 입력한다. ( `onclick` => `onClick` ) (style도 마찬가지 { `margin-top` x => `marginTop` })
-
-
-
-JSX에 삽입 된 값을 렌더링하기전에 이스케이프 하고, 모든 항목은 렌더링 되기 전에 문자열로 바뀐다.
 
 
 
@@ -132,7 +92,6 @@ const element = React.createElement(
 다음과 같은 객체를 생성한다.
 
 ```javascript
-// 주의: 다음 구조는 단순화되었습니다
 const element = {
   type: 'h1',
   props: {
@@ -141,6 +100,38 @@ const element = {
   }
 };
 ```
+
+
+
+
+
+## JSX 속성 정의
+
+attribute에 따옴표`""`를 이용하여 문자열 리터럴을 정의할 수 있다.
+
+```react
+const element = <div className="my-class"></div>
+```
+
+
+
+중괄호를 이용하여 attribute에 JS표현식을 삽입할 수도 있다.
+
+```react
+const element = <img src={ user.avatarUrl }></img>
+```
+
+=>  attribute에 JS표현식을 삽입할 때 따옴표 또는 중괄호 중 하나만 사용해야한다.
+
+
+
+따옴표는 문자열값, 중괄호는 표현식 값에 사용된다.
+
+=> 요소에 class를 줄 때는 `class` 대신 `className`을 사용 (class는 JS예약어임)
+
+=> 그리고 HTML attribute이름은 camelCase로 입력한다. ( `onclick` => `onClick` ) (style도 마찬가지 { `margin-top` x => `marginTop` })
+
+
 
 
 
@@ -183,7 +174,7 @@ function App () {
 
 
 
-Fragment에 key를 줘서 v-for의 효과를 볼 수도 있다.
+Fragment에 key를 줘서 반복문을 감싸지않고 렌더링할 수 있다.
 
 ```react
 function Glossary (props) {
@@ -242,6 +233,186 @@ function App () {
 
 
 
+## 사용자 정의 컴포넌트
+
+ `<div>` 나 `<span>` 같은 내장컴포넌트는 소문자로 시작하지만,
+사용자 정의 컴포넌트는 반드시 대문자로 시작해야한다.
+
+```react
+import React from 'react';
+
+// 잘못된 사용법입니다! 아래는 컴포넌트이므로 대문자화 해야 합니다.
+function hello(props) {
+  // 올바른 사용법입니다! 아래의 <div> 사용법은 유효한 HTML 태그이기 때문에 유효합니다.
+  return <div>Hello {props.toWhat}</div>;
+}
+
+function HelloWorld() {
+  // 잘못된 사용법입니다! React는 <hello />가 대문자가 아니기 때문에 HTML 태그로 인식하게 됩니다.
+  return <hello toWhat="World" />;
+}
+```
+
+
+
+```react
+import React from 'react';
+import { PhotoStory, VideoStory } from './stories';
+
+const components = {
+  photo: PhotoStory,
+  video: VideoStory
+};
+
+
+// 1
+function Story(props) {
+  // 잘못된 사용법입니다! JSX 타입은 표현식으로 사용할 수 없습니다.
+  return <components[props.storyType] story={props.story} />;
+}
+
+// 2
+function Story(props) {
+  // 올바른 사용법입니다! 대문자로 시작하는 변수는 JSX 타입으로 사용할 수 있습니다.
+  const SpecificStory = components[props.storyType];
+  return <SpecificStory story={props.story} />;
+}
+```
+
+
+
+
+
+## boolean, null, undefined
+
+`false`, `null`, `undefined`, `true`는 렌더링되지 않는다.
+
+아래 코드는 모두 동일하게 렌더링된다.
+
+```react
+<div />
+
+<div></div>
+
+<div>{false}</div>
+
+<div>{null}</div>
+
+<div>{undefined}</div>
+
+<div>{true}</div>
+```
+
+
+
+하지만 0같이 false처럼 행세하는 값들은 렌더링된다.
+
+```react
+// messages.length가 0일때
+<div>
+  {props.messages.length &&
+    <MessageList messages={props.messages} />
+  }
+</div>
+
+/// 결과값
+0
+
+
+// 반드시 && 앞의 값이 Boolean이 되도록 해야한다.
+<div>
+  {props.messages.length > 0 &&
+    <MessageList messages={props.messages} />
+  }
+</div>
+```
+
+
+
+
+
+## JSX에서 자식 다루기
+
+여는 태그와 닫는 태그가 있는 JSX 표연에서 두 태그 사이의 내용은 `props.children`이라는 것으로 넘겨진다.
+
+```react
+// App.js
+return (
+ <MyComp>
+  <div>
+    123412342
+    <div>
+      555
+    </div>
+  </div>
+  <span>nnnnn</span>
+  <span></span>
+  {5+2}
+  <MyChild></MyChild>
+</MyComp>
+)
+
+/////////
+// MyComp.js
+function MyComp(props) {
+  console.log(props)
+  return (
+      <div>Hello
+          {props.children}
+      </div>
+  );
+}
+
+export default MyComp;
+
+
+// MyChild.js
+function MyChild(props) {
+    return (
+        <div>Child!!</div>
+    );
+  }
+  
+  export default MyChild;
+```
+
+```
+// 렌더링 결과
+
+Hello
+123412342
+555
+nnnnn7
+Child!!
+```
+
+
+
+다음과 같이 함수를 자식으로 사용할 수도 있다.
+
+```react
+// 자식 콜백인 numTimes를 호출하여 반복되는 컴포넌트를 생성합니다.
+function Repeat(props) {
+  let items = [];
+  for (let i = 0; i < props.numTimes; i++) {
+    items.push(props.children(i));
+  }
+  return <div>{items}</div>;
+}
+
+function ListOfTenThings() {
+  return (
+    <Repeat numTimes={10}>
+      {(index) => <div key={index}>This is item {index} in the list</div>}
+    </Repeat>
+  );
+}
+```
+
+
+
+
+
 
 
 ## 주석
@@ -249,4 +420,11 @@ function App () {
 JSX의 내부 주석은
 
 `{/* 주석주석주석 */}` 이런 형태로 작성한다.
+
+
+
+
+
+- 온라인 바벨 컴파일러
+  https://babeljs.io/repl/#?browsers=defaults%2C%20not%20ie%2011%2C%20not%20ie_mob%2011&build=&builtIns=false&corejs=3.6&spec=false&loose=false&code_lz=GYVwdgxgLglg9mABACwKYBt1wBQEpEDeAUIogE6pQhlIA8AJjAG4B8AEhlogO5xnr0AhLQD0jVgG4iAXyJA&debug=false&forceAllTransforms=false&shippedProposals=false&circleciRepo=&evaluate=false&fileSize=false&timeTravel=false&sourceType=module&lineWrap=true&presets=react&prettier=false&targets=&version=7.15.6&externalPlugins=&assumptions=%7B%7D
 
