@@ -10,7 +10,7 @@ function Counter () {
   const [number, setNumber] = useState(0)
   
   const onIncrease = () => {
-    setNiumber(prevNumber => prevNumber + 1)
+    setNumber(prevNumber => prevNumber + 1)
   }
   
   const onDecrease = () => {
@@ -150,8 +150,7 @@ export default Counter
 > useReducer를 사용하여 LOADING, SUCCESS, ERROR 액션에 따라 컴포넌트를 다르게 return 할 수 있다.
 
 ```react
-import React, { useEffect, useReducer } from 'react';
-import axios from 'axios';
+.........
 
 // reducer 함수
 function reducer(state, action) {
@@ -189,7 +188,7 @@ function Users() {
 
   // users 데이터를 가져오는 함수
   const fetchUsers = async () => {
-    // 로딩
+    // 로딩 on!
     dispatch({ type: 'LOADING' });
     // axios 요청, 에러 처리
     try {
@@ -212,18 +211,7 @@ function Users() {
   if (loading) return <div>로딩중..</div>
   if (error) return <div>에러가 발생했습니다</div>
   if (!users) return null
-  return (
-    <>
-      <ul>
-        {users.map(user => (
-          <li key={user.id}>
-            {user.username} ({user.name})
-          </li>
-        ))}
-      </ul>
-      <button onClick={fetchUsers}>다시 불러오기</button>
-    </>
-  );
+  return ( ...... );
 }
 
 export default Users;
@@ -236,4 +224,303 @@ export default Users;
 
 
 # useAsync custom Hook으로 요청상태 관리
+
+> useAsync는 custom Hook으로 만들어 쓰기도하고 `react-async`에서 가져다쓰기도 한다.
+>
+> 주로 restAPI를 요청하고 로딩, 성공, 에러 처리를 하기위해 쓴다.
+
+```react
+// useAsync.js
+
+import { useReducer, useEffect } from 'react';
+
+function reducer (state, action) {
+  switch (action.type) {
+    case 'LOADING':
+      return {
+        loading: true,
+        data: null,
+        error: null
+      };
+    case 'SUCCESS':
+      return {
+        loading: false,
+        data: action.data,
+        error: null
+      };
+    case 'ERROR':
+      return {
+        loading: false,
+        data: null,
+        error: action.error
+      };
+    default:
+      throw new Error(`Unhandled action type: ${action.type}`);
+  }
+}
+
+function useAsync(callback, deps = [], skip = false) {
+  const [state, dispatch] = useReducer(reducer, {
+    loading: false,
+    data: null,
+    error: false
+  });
+
+  const fetchData = async () => {
+    dispatch({ type: 'LOADING' });
+    try {
+      const data = await callback();
+      dispatch({ type: 'SUCCESS', data });
+    } catch (e) {
+      dispatch({ type: 'ERROR', error: e });
+    }
+  };
+
+  useEffect(() => {
+    if (skip) return;
+    fetchData();
+  }, deps);
+
+  return [state, fetchData];
+}
+
+export default useAsync;
+```
+
+```react
+// Users.js
+........
+
+async function getUsers() {
+  const response = await axios.get(
+    'https://jsonplaceholder.typicode.com/users'
+  );
+  return response.data;
+}
+
+function Users() {
+  const [state, refetch] = useAsync(getUsers, []);
+
+  const { loading, data: users, error } = state; // state.data 를 users 키워드로 조회
+
+  if (loading) return <div>로딩중..</div>;
+  if (error) return <div>에러가 발생했습니다</div>;
+  if (!users) return null;
+  
+  return ( ..... )
+.........
+```
+
+
+
+
+
+
+
+# react-async
+
+> useAsync, useFetch, Async, createInstance등 사용할 수 있는 훅과 컴포넌트들이 있다.
+
+```
+// 설치
+npm install react-async
+```
+
+
+
+## useAsync
+
+```react
+// Users.js
+
+import { useAsync } from "react-async"
+
+// async/await을 쓸 수 있다.
+const loadPlayer = async ({ playerId }, { signal }) => {
+  const res = await fetch(`/api/players/${playerId}`, { signal })
+  if (!res.ok) throw new Error(res.statusText)
+  return res.json()
+}
+
+const MyComponent = () => {
+  const { data, error, isPending, reload } = useAsync({ 
+    promiseFn: loadPlayer, 
+    playerId: 1,
+    watch: playerId
+  }) // deferFn, run, watchFn
+  
+  if (isPending) return "Loading..."
+  if (error) return `Something went wrong: ${error.message}`
+  if (data)
+    return (
+      <div>
+        <strong>Player data:</strong>
+        <pre>{JSON.stringify(data, null, 2)}</pre>
+        <button onClick={reload}>reload!!!!</button>
+      </div>
+    )
+  return null
+}
+```
+
+
+
+## with helper components
+
+```react
+import { useAsync, IfPending, IfFulfilled, IfRejected } from "react-async"
+
+const loadPlayer = async ({ playerId }, { signal }) => {
+  // ...
+}
+
+const MyComponent = () => {
+  const state = useAsync({ promiseFn: loadPlayer, playerId: 1 })
+  return (
+    <>
+      <IfPending state={state}>Loading...</IfPending>
+      <IfRejected state={state}>{error => `Something went wrong: ${error.message}`}</IfRejected>
+      <IfFulfilled state={state}>
+        {data => (
+          <div>
+            <strong>Player data:</strong>
+            <pre>{JSON.stringify(data, null, 2)}</pre>
+          </div>
+        )}
+      </IfFulfilled>
+    </>
+  )
+}
+```
+
+
+
+
+
+
+
+## useFetch
+
+```react
+import { useFetch } from "react-async"
+
+const MyComponent = () => {
+  const headers = { Accept: "application/json" }
+  const { data, error, isPending, run } = useFetch("/api/example", { headers }, options)
+  // This will setup a promiseFn with a fetch request and JSON deserialization.
+
+  // you can later call `run` with an optional callback argument to
+  // last-minute modify the `init` parameter that is passed to `fetch`
+  function clickHandler() {
+    run(init => ({
+      ...init,
+      headers: {
+        ...init.headers,
+        authentication: "...",
+      },
+    }))
+  }
+
+  // alternatively, you can also just use an object that will be spread over `init`.
+  // please note that this is not deep-merged, so you might override properties present in the
+  // original `init` parameter
+  function clickHandler2() {
+    run({ body: JSON.stringify(formValues) })
+  }
+}
+```
+
+
+
+## Async (as a component)
+
+```react
+import Async from "react-async"
+
+const loadPlayer = async ({ playerId }, { signal }) => {
+  const res = await fetch(`/api/players/${playerId}`, { signal })
+  if (!res.ok) throw new Error(res.statusText)
+  return res.json()
+}
+
+const MyComponent = () => (
+  <Async promiseFn={loadPlayer} playerId={1}>
+    <Async.Pending>Loading...</Async.Pending>
+    <Async.Fulfilled>
+      {data => (
+        <div>
+          <strong>Player data:</strong>
+          <pre>{JSON.stringify(data, null, 2)}</pre>
+        </div>
+      )}
+    </Async.Fulfilled>
+    <Async.Rejected>{error => `Something went wrong: ${error.message}`}</Async.Rejected>
+  </Async>
+)
+```
+
+
+
+```react
+import Async from "react-async"
+
+const loadPlayer = async ({ playerId }, { signal }) => {
+  const res = await fetch(`/api/players/${playerId}`, { signal })
+  if (!res.ok) throw new Error(res.statusText)
+  return res.json()
+}
+
+const MyComponent = () => (
+  <Async promiseFn={loadPlayer} playerId={1}>
+    <Async.Pending>Loading...</Async.Pending>
+    <Async.Fulfilled>
+      {data => (
+        <div>
+          <strong>Player data:</strong>
+          <pre>{JSON.stringify(data, null, 2)}</pre>
+        </div>
+      )}
+    </Async.Fulfilled>
+    <Async.Rejected>{error => `Something went wrong: ${error.message}`}</Async.Rejected>
+  </Async>
+)
+```
+
+
+
+
+
+## createInstance
+
+```react
+import { createInstance } from "react-async"
+
+const loadPlayer = async ({ playerId }, { signal }) => {
+  const res = await fetch(`/api/players/${playerId}`, { signal })
+  if (!res.ok) throw new Error(res.statusText)
+  return res.json()
+}
+
+// createInstance takes a defaultOptions object and a displayName (both optional)
+const AsyncPlayer = createInstance({ promiseFn: loadPlayer }, "AsyncPlayer")
+
+const MyComponent = () => (
+  <AsyncPlayer playerId={1}>
+    <AsyncPlayer.Fulfilled>{player => `Hello ${player.name}`}</AsyncPlayer.Fulfilled>
+  </AsyncPlayer>
+)
+```
+
+
+
+
+
+
+
+- react-async 공식 문서
+  https://docs.react-async.com/
+- react-async 참고
+  https://ichi.pro/ko/useasyncui-himgwa-pyeonliham-251392565657923
+
+
 
