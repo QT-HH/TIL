@@ -331,6 +331,11 @@ npm install react-async
 ## useAsync
 
 ```react
+// 기본형태
+const state = useAsync(options)
+```
+
+```react
 // Users.js
 
 import { useAsync } from "react-async"
@@ -402,15 +407,16 @@ const MyComponent = () => {
 ## useFetch
 
 ```react
+const state = useFetch(resource, init, options)
+```
+
+```react
 import { useFetch } from "react-async"
 
 const MyComponent = () => {
   const headers = { Accept: "application/json" }
   const { data, error, isPending, run } = useFetch("/api/example", { headers }, options)
-  // This will setup a promiseFn with a fetch request and JSON deserialization.
 
-  // you can later call `run` with an optional callback argument to
-  // last-minute modify the `init` parameter that is passed to `fetch`
   function clickHandler() {
     run(init => ({
       ...init,
@@ -421,9 +427,6 @@ const MyComponent = () => {
     }))
   }
 
-  // alternatively, you can also just use an object that will be spread over `init`.
-  // please note that this is not deep-merged, so you might override properties present in the
-  // original `init` parameter
   function clickHandler2() {
     run({ body: JSON.stringify(formValues) })
   }
@@ -461,35 +464,6 @@ const MyComponent = () => (
 
 
 
-```react
-import Async from "react-async"
-
-const loadPlayer = async ({ playerId }, { signal }) => {
-  const res = await fetch(`/api/players/${playerId}`, { signal })
-  if (!res.ok) throw new Error(res.statusText)
-  return res.json()
-}
-
-const MyComponent = () => (
-  <Async promiseFn={loadPlayer} playerId={1}>
-    <Async.Pending>Loading...</Async.Pending>
-    <Async.Fulfilled>
-      {data => (
-        <div>
-          <strong>Player data:</strong>
-          <pre>{JSON.stringify(data, null, 2)}</pre>
-        </div>
-      )}
-    </Async.Fulfilled>
-    <Async.Rejected>{error => `Something went wrong: ${error.message}`}</Async.Rejected>
-  </Async>
-)
-```
-
-
-
-
-
 ## createInstance
 
 ```react
@@ -515,12 +489,35 @@ const MyComponent = () => (
 
 
 
-
-
 - react-async 공식 문서
   https://docs.react-async.com/
+  
 - react-async 참고
   https://ichi.pro/ko/useasyncui-himgwa-pyeonliham-251392565657923
 
+- 실습
+
+  https://github.com/QT-HH/TIL/tree/master/react/STUDYSTUDY/useReducer%2CuserAsync%2Creact-async/api-integrate
 
 
+
+
+
+# SWR
+
+>[SWR](https://www.npmjs.com/package/swr)은 Nextjs 로 유명한 vercel 에서 만든 원격데이터 fetch 를 위한 커스텀 훅 npm 모듈입니다. SWR은 원격서버의 상태를 가져와서 리액트 컴포넌트에 꽂아주는 기능을 제공합니다.
+>
+>(redux 대신 쓸 수 있음)
+
+## 특징
+
+- 한번 fetch 한 원격상태의 데이터를 내부적으로 캐시하고 다른 컴포넌트에서 동일한 상태를 사용하고자 할 경우 이전에 캐시했던 상태를 그대로 리턴해 주기 때문에 서로 다른 컴포넌트가 동일한 상태를 공유할 수 있다는 점
+
+- 내부적으로 **적절한 타이밍에 지속적으로 데이터를 폴링**
+
+
+
+## 소개 링크
+
+- https://tech.madup.com/swr-intro1/
+- https://min9nim.vercel.app/2020-10-05-swr-intro2/

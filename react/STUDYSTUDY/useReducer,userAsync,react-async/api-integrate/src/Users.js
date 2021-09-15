@@ -2,8 +2,12 @@
 import React, { useState } from 'react'
 import axios from 'axios'
 // import useAsync from './useAsync'
-import User from './User'
 import { useAsync } from 'react-async'
+// import User from './UserWithReactAsync/User_useAsyncCustom'
+// import User from './UserWithReactAsync/User_useAsync'
+// import User from './UserWithReactAsync/User_useFetch'
+// import User from './UserWithReactAsync/User_createInstance'
+import User from './UserWithReactAsync/User_Async'
 
 
 const getUsers = async () => {
