@@ -335,6 +335,8 @@ npm install react-async
 const state = useAsync(options)
 ```
 
+
+
 ```react
 // Users.js
 
@@ -367,6 +369,8 @@ const MyComponent = () => {
   return null
 }
 ```
+
+
 
 
 
@@ -407,8 +411,11 @@ const MyComponent = () => {
 ## useFetch
 
 ```react
+// 기본형태
 const state = useFetch(resource, init, options)
 ```
+
+
 
 ```react
 import { useFetch } from "react-async"
@@ -438,6 +445,13 @@ const MyComponent = () => {
 ## Async (as a component)
 
 ```react
+// 기본형태
+<Async {...options}>{state => ...}</Async>
+```
+
+
+
+```react
 import Async from "react-async"
 
 const loadPlayer = async ({ playerId }, { signal }) => {
@@ -465,6 +479,13 @@ const MyComponent = () => (
 
 
 ## createInstance
+
+```react
+// 기본형태
+const CustomAsync = createInstance(defaultOptions, displayName)
+```
+
+
 
 ```react
 import { createInstance } from "react-async"

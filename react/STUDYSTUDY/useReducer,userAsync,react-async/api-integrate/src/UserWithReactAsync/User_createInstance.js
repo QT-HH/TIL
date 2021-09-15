@@ -8,7 +8,7 @@ async function getUser({ id, method }, { signal }) {
 }
 
 function User({ id }) {
-  const AsyncUser = createInstance({ promiseFn: getUser, method: 'GET'}, "AsyncPlayer")
+  const AsyncUser = createInstance({ promiseFn: getUser, method: 'GET'})
 
   return (
     <div>

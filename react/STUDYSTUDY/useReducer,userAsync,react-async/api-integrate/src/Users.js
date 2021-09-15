@@ -6,8 +6,8 @@ import { useAsync } from 'react-async'
 // import User from './UserWithReactAsync/User_useAsyncCustom'
 // import User from './UserWithReactAsync/User_useAsync'
 // import User from './UserWithReactAsync/User_useFetch'
-// import User from './UserWithReactAsync/User_createInstance'
-import User from './UserWithReactAsync/User_Async'
+import User from './UserWithReactAsync/User_createInstance'
+// import User from './UserWithReactAsync/User_Async'
 
 
 const getUsers = async () => {
