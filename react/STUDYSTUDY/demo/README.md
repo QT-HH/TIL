@@ -39,7 +39,7 @@ import 상대경로를 절대경로로 변경
 - stylus, stylus-loader 4.3.3버전 설치 ( stylus-loader 5버전부터는 webpack 5)
 
 ```shell
-npm install stylus-loader stylus --save-dev
+npm install stylus-loader@4.3.3 stylus --save-dev
 ```
 
 
