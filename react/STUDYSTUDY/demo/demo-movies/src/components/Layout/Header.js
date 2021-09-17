@@ -1,8 +1,8 @@
-
+import 'components/Layout/Header.styl'
 
 const Header = () => {
   return (
-    <header>
+    <header className={'red'}>
       <h2>Header~~~~~~~~~~~</h2>
     </header>
   )
