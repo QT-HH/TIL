@@ -1,3 +1,4 @@
+import 'components/Layout/Footer.styl'
 
 const Footer = () => {
   return (
