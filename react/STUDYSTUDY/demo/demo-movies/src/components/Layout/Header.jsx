@@ -1,9 +1,12 @@
 import 'components/Layout/Header.styl'
+import { NavLink } from 'react-router-dom'
+
 
 const Header = () => {
   return (
     <header className={'red'}>
-      <h2>Header~~~~~~~~~~~</h2>
+      <NavLink exact to="/">Home</NavLink>
+      <NavLink to="/about">About</NavLink>
     </header>
   )
 }

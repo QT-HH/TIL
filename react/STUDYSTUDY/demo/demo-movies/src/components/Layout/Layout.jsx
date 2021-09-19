@@ -1,5 +1,5 @@
-import Header from 'components/Layout/Header.js'
-import Footer from 'components/Layout/Footer.js'
+import Header from 'components/Layout/Header.jsx'
+import Footer from 'components/Layout/Footer.jsx'
 
 const Layout = (props) => {
   return (
