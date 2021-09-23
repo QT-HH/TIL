@@ -4,13 +4,12 @@ import { useDispatch } from 'react-redux'
 import { getMovieInfo } from 'state/MovieData'
 import { changeNum } from 'state/LikeHate'
 
-const CommonCard = ({...props}) => {
+const CommonCard = (props) => {
   const dispatch = useDispatch()
   const movieCd = props.movie.movieCd
   const getData = () => {
-    console.log('props', props)
     dispatch(getMovieInfo({ movieCd: movieCd }))
-    // dispatch(changeNum({number: props.key}))
+    dispatch(changeNum({ movieCd: movieCd }))
   }
 
   return (

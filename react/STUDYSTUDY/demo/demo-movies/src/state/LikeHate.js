@@ -14,7 +14,7 @@ export const hate = (number) => ({ type: HATE, number: number })
 export const likeAsync = (number) => ({ type: LIKE_ASYNC, number: number})
 export const hateAsync = (number) => ({ type: HATE_ASYNC, number: number})
 export const initialize = () => ({ type: INITIALIZE })
-export const changeNum = (number) => ({ type: CHANGE_NUM, number: number})
+export const changeNum = (number) => ({ type: CHANGE_NUM, number: number.movieCd})
 export const initializeAsync = () => ({ type: INITIALIZE_ASYNC })
 export const changeNumAsync = (number) => ({ type: CHANGE_NUM_ASYNC, number: number})
 
@@ -45,22 +45,15 @@ export function* counterSaga() {
   yield takeLatest(CHANGE_NUM, changeNumSaga)
 }
 
-const initialState = { count: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0], number: 0}
+const initialState = {}
 
 export default function counter(state = initialState, action) {
   console.log('action',action)
-  const newCount = state.count.slice()
   switch (action.type) {
     case LIKE:
-      newCount[action.number] += 1
-      return { ...state, count: newCount}
+      return { ...state}
     case HATE:
-      newCount[action.number] -= 1
-      return { ...state, count: newCount}
-    case INITIALIZE:
-      return { count: [0,0,0,0,0,0,0,0,0,0], number: 0 }
-    // case CHANGE_NUM:
-    //   return { ...state, number: action.number }
+      return { ...state}
     default:
       return state
   }

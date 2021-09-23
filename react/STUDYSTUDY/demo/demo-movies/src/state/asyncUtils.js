@@ -40,7 +40,6 @@ export const handleAsyncActions = (type, key, keepData = false) => {
           [key]: reducerUtils.loading(keepData ? state[key].data : null)
         };
       case SUCCESS:
-        console.log('Success', action.payload)
         return {
           ...state,
           [key]: reducerUtils.success(action.payload)
