@@ -5,8 +5,8 @@ import { NavLink } from 'react-router-dom'
 const Header = () => {
   return (
     <header className={'red'}>
-      <NavLink exact to="/">Home</NavLink>
-      <NavLink to="/about">About</NavLink>
+      <NavLink exact to="/">주간 박스오피스</NavLink>
+      <NavLink to="/about">이름으로 검색</NavLink>
     </header>
   )
 }

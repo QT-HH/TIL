@@ -1,7 +1,9 @@
 import React from 'react'
 import 'components/common/CommonDialog.styl'
-import { useDispatch } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
 import { getMovieInfo } from 'state/MovieData';
+import { like, hate } from 'state/LikeHate';
+import { RootState } from 'state/index'
 
 const CommonDialog = ({...props}) => {
   // const movieCd = props
@@ -9,6 +11,13 @@ const CommonDialog = ({...props}) => {
   const deleteData = () => {
     dispatch(getMovieInfo({ movieCd: null }))
   }
+  const onLike = () => {
+    dispatch(like())
+  }
+  const onHate = () => {
+    dispatch(hate())
+  }
+  const count = useSelector((state: RootState) => state.counter)
 
   return (
     <>
@@ -20,10 +29,10 @@ const CommonDialog = ({...props}) => {
         <div className={'movieContent'}>
           영화정보가 없어용 영화정보가 없어용 영화정보가 없어용 영화정보가 없어용 영화정보가 없어용 영화정보가 없어용 영화정보가 없어용 영화정보가 없어용 영화정보가 없어용 영화정보가 없어용 영화정보가 없어용 영화정보가 없어용 영화정보가 없어용 영화정보가 없어용 
         </div>
-        <span className={'count'}>0</span>
-        <button>좋아요</button>
-        <button>싫어요</button>
-        <span className={'count'}>0</span>
+        <span className={'count'}>{count[`${props.info.movieCd}_LIKE`]}</span>
+        <button onClick={onLike}>좋아요</button>
+        <button onClick={onHate}>싫어요</button>
+        <span className={'count'}>{count[`${props.info.movieCd}_HATE`]}</span>
       </div>
     </>
   )

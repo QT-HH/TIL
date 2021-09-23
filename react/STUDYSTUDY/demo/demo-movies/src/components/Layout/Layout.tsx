@@ -1,5 +1,5 @@
-import Header from 'components/Layout/Header.jsx'
-import Footer from 'components/Layout/Footer.jsx'
+import Header from 'components/Layout/Header'
+import Footer from 'components/Layout/Footer'
 import 'components/Layout/Layout.styl'
 
 const Layout = (props) => {

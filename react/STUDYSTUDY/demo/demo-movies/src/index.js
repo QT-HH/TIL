@@ -1,12 +1,12 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
-import App from './App.jsx';
+import App from './App.tsx';
 import reportWebVitals from './reportWebVitals';
 import { BrowserRouter } from 'react-router-dom'
 import { applyMiddleware, createStore } from 'redux'
 import { Provider } from 'react-redux'
-import rootReducer, { rootSaga } from 'state/index.js';
+import rootReducer, { rootSaga } from 'state/index';
 import { composeWithDevTools } from 'redux-devtools-extension';
 import createSagaMiddleware from 'redux-saga';
 

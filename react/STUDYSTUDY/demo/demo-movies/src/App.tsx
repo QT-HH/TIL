@@ -1,5 +1,5 @@
 import './App.css';
-import BackGroundPage from 'pages/BackGroundPage.jsx';
+import BackGroundPage from 'pages/BackGroundPage';
 
 function App() {
   return (
