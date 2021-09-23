@@ -8,8 +8,8 @@ import CommonDialog from 'components/common/CommonDialog'
 import { RootState } from 'state/index'
 
 
-const About = () => {
-  const [input, setInput] = useState('')
+const About: React.FC = () => {
+  const [input, setInput] = useState<String>('')
   const weeklyData = useSelector((state: RootState) => state.movieData.weeklyDataName)
   const infoData = useSelector((state: RootState) => state.movieData.movieInfo)
   // const body = { movieNm: input }

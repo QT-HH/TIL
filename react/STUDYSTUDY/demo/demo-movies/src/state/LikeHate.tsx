@@ -42,7 +42,7 @@ export function* counterSaga() {
 const initialState = { }
 
 export default function counter(state = initialState, action: {type: String}) {
-  const number: Number = state.number
+  const number: number = state.number
   if (number === undefined) {
     // pass
   } else if (state[`${number}_LIKE`] === undefined || state[`${number}_LIKE`] === null) {

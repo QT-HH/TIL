@@ -1,13 +1,14 @@
-import React, { useEffect } from 'react';
+import React, { useEffect } from 'react'
 // import { Route } from 'react-router-dom'
 import 'pages/Home.styl'
 import { useSelector, useDispatch } from 'react-redux'
-import { getWeeklyData } from 'state/MovieData';
+import { getWeeklyData } from 'state/MovieData'
 import CommonCard from 'components/common/CommonCard'
 import CommonDialog from 'components/common/CommonDialog'
 import { RootState } from 'state/index'
 
-const Home = () => {
+function Home () {
+// const Home: React.FC = () => {
   const weeklyData = useSelector((state: RootState) => state.movieData.weeklyData)
   const infoData = useSelector((state: RootState) => state.movieData.movieInfo)
   const state = useSelector(state => state)
