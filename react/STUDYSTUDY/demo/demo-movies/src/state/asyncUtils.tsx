@@ -23,7 +23,7 @@ export const reducerUtils = {
 };
 
 
-export const handleAsyncActions = (type: String, key: String, keepData = false) => {
+export const handleAsyncActions = (type: string, key: string, keepData = false) => {
   const [SUCCESS, ERROR] = [`${type}_SUCCESS`, `${type}_ERROR`];
   return (state, action) => {
     switch (action.type) {

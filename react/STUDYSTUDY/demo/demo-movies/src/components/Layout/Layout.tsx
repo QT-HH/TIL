@@ -1,5 +1,5 @@
 import Header from 'components/Layout/Header'
-import Footer from 'components/Layout/Footer'
+// import Footer from 'components/Layout/Footer'
 import 'components/Layout/Layout.styl'
 
 const Layout = (props) => {
@@ -9,7 +9,7 @@ const Layout = (props) => {
       <main>
         { props.children }
       </main>
-      <Footer />
+      {/* <Footer /> */}
     </>
   )
 }

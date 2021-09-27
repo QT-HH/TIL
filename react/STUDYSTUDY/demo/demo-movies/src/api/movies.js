@@ -7,25 +7,44 @@ const nameUrl = 'http://www.kobis.or.kr/kobisopenapi/webservice/rest/movie/searc
 export const getWeeklyData = async (body) => {
   const requestUrl = weeklyUrl + '?key=' + key + '&targetDt=' + body.targetDt
 
-  const data = await fetch(requestUrl).then(res => {
+  const result = await fetch(requestUrl).then(res => {
     return res.json()
   })
-  .catch(err =>{
+  .catch(err => {
     console.log(err)
   })
-  return data.boxOfficeResult
+  const dataArr = result.boxOfficeResult.weeklyBoxOfficeList
+  const dataArrRes = dataArr.map(data => {
+    return {
+      movieNm: data.movieNm,
+      openDt: data.openDt,
+      movieCd: data.movieCd
+    }
+  })
+  console.log('asdf', dataArrRes)
+  return dataArrRes
 }
 
 export const getWeeklyDataName = async (body) => {
   const requestUrl = nameUrl + '?key=' + key + '&movieNm=' + body.movieNm
 
-  const data = await fetch(requestUrl).then(res => {
+  const result = await fetch(requestUrl).then(res => {
     return res.json()
   })
   .catch(err =>{
     console.log(err)
   })
-  return data.movieListResult.movieList
+
+  const dataArr = result.movieListResult.movieList
+  const dataArrRes = dataArr.map(data => {
+    return {
+      movieNm: data.movieNm,
+      movieNmEn: data.movieNmEn,
+      openDt: data.openDt,
+      movieCd: data.movieCd,
+    }
+  })
+  return dataArrRes
 }
 
 export const getMovieInfo = async (body) => {

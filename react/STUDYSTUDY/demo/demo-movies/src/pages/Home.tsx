@@ -7,9 +7,22 @@ import CommonCard from 'components/common/CommonCard'
 import CommonDialog from 'components/common/CommonDialog'
 import { RootState } from 'state/index'
 
+type weeklyDataType = 
+  | {
+      movieNm: string
+      openDt: string
+      movieCd: string
+    }
+  | {
+    movieNm: string
+    movieNmEn: string
+    openDt: string
+    movieCd: string
+    }
+
 function Home () {
-// const Home: React.FC = () => {
   const weeklyData = useSelector((state: RootState) => state.movieData.weeklyData)
+  console.log(weeklyData.data)
   const infoData = useSelector((state: RootState) => state.movieData.movieInfo)
   const state = useSelector(state => state)
   const body = { targetDt: '20210917' }
@@ -24,15 +37,14 @@ function Home () {
   useEffect(() => {
     getData()
   }, [])
+
   return (
     <>
       <h1>주간 박스오피스</h1>
       <button onClick={check}>state</button>
-      {/* <button onClick={getData}>데이터 불러오기</button> */}
-      {/* <button>이름순 정렬</button> */}
       <div className={'cardContainer'}>
         {!!weeklyData.data && 
-          weeklyData.data.weeklyBoxOfficeList.map((movie, index) => (
+          weeklyData.data.map((movie: weeklyDataType, index: number) => (
             <CommonCard key={index} movie={movie} />))
         }
       </div>

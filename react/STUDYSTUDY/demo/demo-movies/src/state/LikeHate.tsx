@@ -12,7 +12,7 @@ export const hate = () => ({ type: HATE })
 export const likeAsync = () => ({ type: LIKE_ASYNC })
 export const hateAsync = () => ({ type: HATE_ASYNC })
 export const changeNum = (number: {movieCd: Number}) => ({ type: CHANGE_NUM, number: number.movieCd })
-export const changeNumAsync = (number: {number: Number}) => ({ type: CHANGE_NUM_ASYNC, number: number.number })
+export const changeNumAsync = (number: {number: number}) => ({ type: CHANGE_NUM_ASYNC, number: number.number })
 
 function* likeSaga() {
   yield delay(1)
@@ -25,7 +25,7 @@ function* hateSaga() {
 }
 
 
-function* changeNumSaga(number: Number) {
+function* changeNumSaga(number: number) {
   yield delay(1)
   yield put({
     type: CHANGE_NUM,
@@ -39,9 +39,21 @@ export function* counterSaga() {
   yield takeLatest(CHANGE_NUM_ASYNC, changeNumSaga)
 }
 
-const initialState = { }
+type initialStateType = 
+  | { number: number } 
+  | { }
 
-export default function counter(state = initialState, action: {type: String}) {
+type ActionType = 
+  | { type: 'LIKE' }
+  | { type: 'HATE' }
+  | { type: 'CHANGE_NUM'; number: number }
+  | { type: 'LIKE_ASYNC' }
+  | { type: 'HATE_ASYNC' }
+  | { type: 'CHANGE_NUM_ASYNC'; number: number }
+
+const initialState: initialStateType = { }
+
+export default function counter(state: initialStateType = initialState, action: ActionType) {
   const number: number = state.number
   if (number === undefined) {
     // pass
