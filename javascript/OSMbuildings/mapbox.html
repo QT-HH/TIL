@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Add a third party vector tile source</title>
+<meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no">
+<link href="https://api.mapbox.com/mapbox-gl-js/v2.6.0/mapbox-gl.css" rel="stylesheet">
+<script src="https://api.mapbox.com/mapbox-gl-js/v2.6.0/mapbox-gl.js"></script>
+<style>
+body { margin: 0; padding: 0; }
+#map { position: absolute; top: 0; bottom: 0; width: 100%; }
+</style>
+</head>
+<body>
+<div id="map"></div>
+<script>
+	mapboxgl.accessToken = ''
+    const map = new mapboxgl.Map({
+        container: 'map',
+        style: 'mapbox://styles/mapbox/streets-v11',
+        zoom: 12,
+        center: [-87.622088, 41.878781]
+    });
+
+    map.on('load', () => {
+        // Add a new vector tile source with ID 'mapillary'.
+        map.addSource('mapillary', {
+            'type': 'vector',
+            'tiles': ['https://a.data.osmbuildings.org/0.2/dixw8kmb/tile/{z}/{x}/{y}.json'],
+            // 'url': 'https://{s}.data.osmbuildings.org/0.2/anonymous/tile/{z}/{x}/{y}.json',
+            // 'minzoom': 6,
+            // 'maxzoom': 14
+        });
+        map.addLayer(
+          {
+            'id': 'mapillary', // Layer ID
+            'type': 'fill-extrusion',
+            'source': 'mapillary', // ID of the tile source created above
+            // Source has several layers. We visualize the one with name 'sequence'.
+            'source-layer': 'building',
+            'fill-extrusion-height': [
+            'interpolate',
+            ['linear'],
+            ['zoom'],
+            15,
+            0,
+            15.05,
+            ['get', 'height']
+            ],
+          },
+          'road-label' // Arrange our new layer beneath this layer
+        );
+    });
+
+    map.addControl(new mapboxgl.NavigationControl());
+</script>
+
+</body>
+</html>
