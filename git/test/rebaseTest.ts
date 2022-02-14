@@ -1,3 +1,6 @@
 console.log('rebase test')
 console.log('rebase test2')
 console.log('rebase test3')
+console.log('rebase test4')
+console.log('rebase test5')
+console.log('rebase test6')
